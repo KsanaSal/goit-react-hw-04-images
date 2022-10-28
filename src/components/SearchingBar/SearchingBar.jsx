@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import {
@@ -9,26 +9,24 @@ import {
   SearchFormInput,
 } from './SearchingBar.styled';
 
-export class SearchBar extends Component {
-  state = {
-    searchString: '',
-  };
+export const SearchBar = (props) => {
+  const [searchString, setSearchString] = useState('');
+  
 
-  handleOnChange = event => {
-    this.setState({ searchString: event.currentTarget.value.toLowerCase() });
+  const handleOnChange = event => {
+    setSearchString( event.currentTarget.value.toLowerCase() );
   };
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    if (this.state.searchString.trim() === '') {
+    if (searchString.trim() === '') {
       Notify.info('Please, write name for the image');
       return;
     }
-    this.props.onSubmit(this.state.searchString);
+    props.onSubmit(searchString);
   };
-  render() {
     return (
       <SearchBarHeader>
-        <SearchForm onSubmit={this.handleSubmit}>
+        <SearchForm onSubmit={handleSubmit}>
           <SearchFormButton type="submit">
             <AiOutlineSearch />
           </SearchFormButton>
@@ -36,8 +34,8 @@ export class SearchBar extends Component {
           <SearchFormInput
             type="text"
             autocomplete="off"
-            value={this.state.searchString}
-            onChange={this.handleOnChange}
+            value={searchString}
+            onChange={handleOnChange}
             autoFocus
             placeholder="Search images and photos"
           />
@@ -45,7 +43,7 @@ export class SearchBar extends Component {
       </SearchBarHeader>
     );
   }
-}
+
 
 SearchBar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
